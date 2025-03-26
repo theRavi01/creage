@@ -1,5 +1,6 @@
 package com.creage.serviceImpl;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Random;
 
@@ -12,9 +13,12 @@ import com.creage.dto.OtpVerificationDto;
 import com.creage.dto.UserRegistrationDto;
 import com.creage.exception.ValidationException;
 import com.creage.model.Otp;
+import com.creage.model.PlanType;
+import com.creage.model.Subscription;
 import com.creage.model.Users;
 import com.creage.repository.OtpRepository;
 import com.creage.repository.UsersRepository;
+import com.creage.service.SubscriptionService;
 import com.creage.service.UsersService;
 
 import jakarta.transaction.Transactional;
@@ -30,12 +34,15 @@ public class UsersServiceImpl implements UsersService {
 	private final UsersRepository usersRepository;
 	private final OtpRepository otpRepository;
 	private final EmailService emailService;
+	private final SubscriptionService subService;
 	private final Random random = new Random();
 
-	public UsersServiceImpl(UsersRepository usersRepository, OtpRepository otpRepository, EmailService emailService) {
+	public UsersServiceImpl(UsersRepository usersRepository, OtpRepository otpRepository, EmailService emailService
+			,SubscriptionService subService) {
 		this.usersRepository = usersRepository;
 		this.otpRepository = otpRepository;
 		this.emailService = emailService;
+		this.subService = subService;
 	}
 
 	@Override
@@ -80,10 +87,16 @@ public class UsersServiceImpl implements UsersService {
 		newUser.setEmail(dto.getEmail());
 		newUser.setPassword(dto.getPassword());
 		newUser.setRole(dto.getRole());
-		usersRepository.save(newUser);
-
+		Users savedUser = usersRepository.save(newUser);
+		Subscription subscription = new Subscription();
+        subscription.setUser(savedUser);
+        subscription.setSubscriptionStartDate(LocalDate.now());
+        subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(1));
+        subscription.setValid(true);
+        subscription.setPlanType(PlanType.FREE);
+		subService.subscribeUser(savedUser.getId(), subscription); 
 		// Delete OTP record after verification
-		otpRepository.deleteByEmail(dto.getEmail());
+		otpRepository.deleteByEmail(dto.getEmail()); 
 
 		return "User successfully registered.";
 	}

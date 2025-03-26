@@ -43,6 +43,8 @@ public class StudentProfileServiceImpl {
 
             StudentProfile profile = StudentProfile.builder()
                     .userId(user)
+                    .firstName(dto.getFirstName())
+                    .firstName(dto.getLastName())
                     .headline(dto.getHeadline())
                     .currentPosition(dto.getCurrentPosition())
                     .education(dto.getEducation())

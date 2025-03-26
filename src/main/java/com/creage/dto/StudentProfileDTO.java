@@ -10,6 +10,12 @@ public class StudentProfileDTO {
     @NotNull(message = "User ID is required")
     private Long userId;
 
+    @NotBlank(message = "FirstName cannot be empty")
+    private String firstName;
+    
+    @NotBlank(message = "LastName cannot be empty")
+    private String lastName;
+    
     @NotBlank(message = "Headline cannot be empty")
     private String headline;
 

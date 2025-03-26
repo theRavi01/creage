@@ -2,17 +2,9 @@ package com.creage.model;
 
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "skills")
@@ -29,5 +21,6 @@ public class Skill {
     private String name;  // e.g., "Java", "Spring Boot", "React"
 
     @ManyToMany(mappedBy = "skills")
+    @JsonBackReference  // Prevents infinite recursion
     private List<StudentProfile> studentProfiles;
 }

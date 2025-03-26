@@ -2,23 +2,13 @@ package com.creage.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.*;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Entity
 @Table(name = "student_profile")
@@ -36,7 +26,8 @@ public class StudentProfile {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users userId; 
-
+    private String firstName;
+    private String lastName;
     private String profilePhoto; 
     private String backgroundPhoto; 
     
@@ -45,6 +36,7 @@ public class StudentProfile {
     
     @NotBlank(message = "Current position is required")
     private String currentPosition;
+    
     private String education; 
     
     @NotBlank(message = "Location is required")
@@ -53,28 +45,30 @@ public class StudentProfile {
     private String aboutMe;
     private boolean openToWork; 
 
-    @ManyToMany 
+    @ManyToMany
     @JoinTable(
-        name = "student_profile_skills",
+        name = "student_skills",
         joinColumns = @JoinColumn(name = "student_profile_id"),
         inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
-    @NotEmpty(message = "At least one skill is required")
+    @JsonManagedReference  // Prevents infinite recursion
     private List<Skill> skills;
-	
 
-    @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore  // Prevents serialization issues
     private List<Education> educationList;
 
-    @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Experience> experiences;
 
-    @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Certification> certifications;
-
 
     private String resumeLink; 
     private String portfolioLink; 
@@ -87,4 +81,3 @@ public class StudentProfile {
 
     private LocalDateTime updatedAt = LocalDateTime.now();
 }
-

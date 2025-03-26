@@ -1,19 +1,8 @@
 package com.creage.model;
 
 import java.util.List;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "company")
@@ -28,13 +17,26 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private Users user; 
+
     private String name;
     private String description;
     private String industry;
     private String location;
     private String website;
-    private boolean isVerified; // Indicates if the company is verified by the portal
+    private String contactEmail;
+    private String contactPhone;
+    private String linkedIn;
+    private String twitter;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @Enumerated(EnumType.STRING)
+    private CompanyVerification isVerified;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<JobVacancy> jobVacancies;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StudentProfile> placedStudents;
 }

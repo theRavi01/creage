@@ -2,6 +2,7 @@ package com.creage.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,5 +32,7 @@ public class Subscription {
 	private boolean isValid;
 	
 	@OneToOne
+	@JsonIgnore  // Prevents infinite recursion
 	private Users user;
+
 }
