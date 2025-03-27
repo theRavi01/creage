@@ -8,12 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.creage.controller.UsersController;
+import com.creage.controller.AuthController;
 import com.creage.dto.OtpVerificationDto;
 import com.creage.dto.UserRegistrationDto;
 import com.creage.exception.ValidationException;
 import com.creage.model.Otp;
-import com.creage.model.PlanType;
 import com.creage.model.Subscription;
 import com.creage.model.Users;
 import com.creage.repository.OtpRepository;
@@ -22,14 +21,13 @@ import com.creage.service.SubscriptionService;
 import com.creage.service.UsersService;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class UsersServiceImpl implements UsersService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(UsersController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
 
 	private final UsersRepository usersRepository;
 	private final OtpRepository otpRepository;
@@ -93,7 +91,7 @@ public class UsersServiceImpl implements UsersService {
         subscription.setSubscriptionStartDate(LocalDate.now());
         subscription.setSubscriptionEndDate(LocalDate.now().plusMonths(1));
         subscription.setValid(true);
-        subscription.setPlanType(PlanType.FREE);
+        subscription.setPlanType("FREE");
 		subService.subscribeUser(savedUser.getId(), subscription); 
 		// Delete OTP record after verification
 		otpRepository.deleteByEmail(dto.getEmail()); 

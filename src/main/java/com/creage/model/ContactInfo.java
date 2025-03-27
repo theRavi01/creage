@@ -27,8 +27,8 @@ public class ContactInfo {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "student_profile_id", nullable = false)
-    private StudentProfile studentProfile;
+    @JoinColumn(name = "job_seeker_profile_id", nullable = false)
+    private JobSeekerProfile studentProfile;
 
     private String email;
     private String phone;

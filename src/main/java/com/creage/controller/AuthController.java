@@ -16,12 +16,12 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/users")
-public class UsersController {
+public class AuthController {
 	
 	 @Autowired
 	 private UsersService userService;
 	 
-	private static final Logger LOG = LoggerFactory.getLogger(UsersController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
 	
 	@GetMapping("/test")
 	public String test() {

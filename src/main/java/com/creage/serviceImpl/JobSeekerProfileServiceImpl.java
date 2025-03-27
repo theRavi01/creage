@@ -8,10 +8,10 @@ import com.creage.dto.StudentProfileDTO;
 import com.creage.exception.ResourceNotFoundException;
 import com.creage.exception.ValidationException;
 import com.creage.model.Skill;
-import com.creage.model.StudentProfile;
+import com.creage.model.JobSeekerProfile;
 import com.creage.model.Users;
 import com.creage.repository.SkillRepository;
-import com.creage.repository.StudentProfileRepository;
+import com.creage.repository.JobSeekerProfileRepository;
 import com.creage.repository.UsersRepository;
 
 import jakarta.transaction.Transactional;
@@ -21,15 +21,15 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class StudentProfileServiceImpl {
+public class JobSeekerProfileServiceImpl {
 
 	
-    private final StudentProfileRepository studentProfileRepository;
+    private final JobSeekerProfileRepository jobSeekerProfileRepository;
     private final UsersRepository usersRepository;
     private final SkillRepository skillRepository;
     
     @Transactional
-    public StudentProfile createStudentProfile(StudentProfileDTO dto) {
+    public JobSeekerProfile createStudentProfile(StudentProfileDTO dto) {
         try {
             log.info("Creating new student profile for User ID: {}", dto.getUserId());
 
@@ -41,7 +41,7 @@ public class StudentProfileServiceImpl {
                 throw new ValidationException("At least one valid skill is required");
             }
 
-            StudentProfile profile = StudentProfile.builder()
+            JobSeekerProfile profile = JobSeekerProfile.builder()
                     .userId(user)
                     .firstName(dto.getFirstName())
                     .firstName(dto.getLastName())
@@ -55,23 +55,23 @@ public class StudentProfileServiceImpl {
                     .skills(skills)
                     .build();
 
-            return studentProfileRepository.save(profile);
+            return jobSeekerProfileRepository.save(profile);
         } catch (Exception e) {
             log.error("Error creating student profile: {}", e.getMessage());
             throw new ValidationException("Failed to create profile: " + e.getMessage());
         }
     }
 
-    public StudentProfile getStudentProfile(Long userId) {
+    public JobSeekerProfile getStudentProfile(Long userId) {
         log.info("Fetching student profile for User ID: {}", userId);
-        return studentProfileRepository.findByUserId(userId)
+        return jobSeekerProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Profile not found for User ID: " + userId));
     }
 
     @Transactional
-    public StudentProfile updateStudentProfile(Long userId, StudentProfileDTO dto) {
+    public JobSeekerProfile updateStudentProfile(Long userId, StudentProfileDTO dto) {
         log.info("Updating student profile for User ID: {}", userId);
-        StudentProfile profile = getStudentProfile(userId);
+        JobSeekerProfile profile = getStudentProfile(userId);
 
         profile.setHeadline(dto.getHeadline());
         profile.setCurrentPosition(dto.getCurrentPosition());
@@ -87,13 +87,13 @@ public class StudentProfileServiceImpl {
         }
         profile.setSkills(skills);
 
-        return studentProfileRepository.save(profile);
+        return jobSeekerProfileRepository.save(profile);
     }
 
     @Transactional
     public void deleteStudentProfile(Long userId) {
         log.info("Deleting student profile for User ID: {}", userId);
-        StudentProfile profile = getStudentProfile(userId);
-        studentProfileRepository.delete(profile);
+        JobSeekerProfile profile = getStudentProfile(userId);
+        jobSeekerProfileRepository.delete(profile);
     }
 }

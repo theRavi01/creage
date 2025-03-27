@@ -27,8 +27,9 @@ public class Education {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "student_profile_id", nullable = false)
-    private StudentProfile studentProfile;
+    @JoinColumn(name = "job_seeker_profile_id", nullable = false)
+    private JobSeekerProfile jobseekerProfile; // ✅ Make this match mappedBy
+
 
     private String institution;
     private String degree;

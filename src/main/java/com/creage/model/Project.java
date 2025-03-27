@@ -29,8 +29,9 @@ public class Project {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "student_profile_id", nullable = false)
-    private StudentProfile studentProfile;
+    @JoinColumn(name = "job_seeker_profile_id", nullable = false) // Ensure it matches JobSeekerProfile.java
+    private JobSeekerProfile jobseekerProfile;
+
 
     private String title;
     private String description;

@@ -23,8 +23,15 @@ public class JobApplication {
 
     @ManyToOne
     @JoinColumn(name = "applicant_id", nullable = false)
-    private JobApplicant applicant;
+    private JobSeekerProfile applicant;
 
-    private LocalDateTime appliedAt = LocalDateTime.now();
-    private String status; // e.g., Applied, Under Review, Interview Scheduled, Offered, Rejected
+    @Enumerated(EnumType.STRING)
+    private ApplicationStatus status;
+
+    private LocalDateTime appliedAt;
+
+    @PrePersist
+    public void setAppliedAt() {
+        this.appliedAt = LocalDateTime.now();
+    }
 }

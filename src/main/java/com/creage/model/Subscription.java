@@ -27,12 +27,12 @@ public class Subscription {
 	
 	private LocalDate subscriptionEndDate;
 	
-	private PlanType planType;
+	private String planType;
 	
 	private boolean isValid;
 	
 	@OneToOne
-	@JsonIgnore  // Prevents infinite recursion
+	@JsonIgnore  
 	private Users user;
 
 }

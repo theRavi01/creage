@@ -22,5 +22,5 @@ public class Skill {
 
     @ManyToMany(mappedBy = "skills")
     @JsonBackReference  // Prevents infinite recursion
-    private List<StudentProfile> studentProfiles;
+    private List<JobSeekerProfile> studentProfiles;
 }

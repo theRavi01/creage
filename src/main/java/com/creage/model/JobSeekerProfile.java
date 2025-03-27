@@ -11,13 +11,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "student_profile")
+@Table(name = "job_seeker")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StudentProfile {
+public class JobSeekerProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,28 +47,33 @@ public class StudentProfile {
 
     @ManyToMany
     @JoinTable(
-        name = "student_skills",
-        joinColumns = @JoinColumn(name = "student_profile_id"),
+        name = "job_seeker_skills",
+        joinColumns = @JoinColumn(name = "job_seeker_profile_id"),
         inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
     @JsonManagedReference  // Prevents infinite recursion
     private List<Skill> skills;
 
-    @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "jobseekerProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore  // Prevents serialization issues
     private List<Education> educationList;
 
-    @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "jobseekerProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Experience> experiences;
 
-    @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "jobseekerProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "studentProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "jobseekerProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Certification> certifications;
+    
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     private String resumeLink; 
     private String portfolioLink; 
@@ -80,4 +85,5 @@ public class StudentProfile {
     private String contactPhone;
 
     private LocalDateTime updatedAt = LocalDateTime.now();
+    
 }

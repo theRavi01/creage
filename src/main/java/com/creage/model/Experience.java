@@ -28,10 +28,10 @@ public @Data class Experience {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "student_profile_id", nullable = false)
-    private StudentProfile studentProfile;
+    @JoinColumn(name = "job_seeker_profile_id", nullable = false)
+    private JobSeekerProfile jobseekerProfile; // ✅ Corrected field name
 
-    private String company;
+    String company;
     private String role;
     private String location;
     private int startYear;

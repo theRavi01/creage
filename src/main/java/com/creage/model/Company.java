@@ -38,5 +38,5 @@ public class Company {
     private List<JobVacancy> jobVacancies;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<StudentProfile> placedStudents;
+    private List<JobSeekerProfile> placedStudents;
 }
