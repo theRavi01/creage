@@ -7,6 +7,8 @@ import java.util.List;
 @Data
 public class StudentProfileDTO {
     
+    private Long id;
+    
     @NotNull(message = "User ID is required")
     private Long userId;
 

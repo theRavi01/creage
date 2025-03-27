@@ -10,13 +10,14 @@ import com.creage.serviceImpl.JobSeekerProfileServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/student-profiles")
+@RequestMapping("/api/v1/jobseeker-profiles")
 @RequiredArgsConstructor
 public class JobSeekerController {
 
@@ -26,9 +27,10 @@ public class JobSeekerController {
     
 
     @PostMapping
-    public ResponseEntity<JobSeekerProfile> createProfile(@RequestBody StudentProfileDTO dto) {
-        return ResponseEntity.ok(studentProfileService.createStudentProfile(dto));
+    public ResponseEntity<Map<String, Object>> createOrUpdateProfile(@RequestBody StudentProfileDTO dto) {
+        return studentProfileService.createOrUpdateStudentProfile(dto);
     }
+
 
     @GetMapping("/{userId}")
     public ResponseEntity<JobSeekerProfile> getProfile(@PathVariable Long userId) {

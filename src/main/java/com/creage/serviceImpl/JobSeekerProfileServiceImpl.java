@@ -1,7 +1,10 @@
 package com.creage.serviceImpl;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.creage.dto.StudentProfileDTO;
@@ -29,38 +32,61 @@ public class JobSeekerProfileServiceImpl {
     private final SkillRepository skillRepository;
     
     @Transactional
-    public JobSeekerProfile createStudentProfile(StudentProfileDTO dto) {
+    public ResponseEntity<Map<String, Object>> createOrUpdateStudentProfile(StudentProfileDTO dto) {
         try {
-            log.info("Creating new student profile for User ID: {}", dto.getUserId());
+            JobSeekerProfile profile;
+            String message;
 
-            Users user = usersRepository.findById(dto.getUserId())
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+            if (dto.getId() != null) {
+                // Update existing profile
+                profile = jobSeekerProfileRepository.findById(dto.getId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Profile not found with ID: " + dto.getId()));
+                
+                log.info("Updating student profile for ID: {}", dto.getId());
+                message = "Profile updated successfully";
+            } else {
+                // Create new profile
+                log.info("Creating new student profile for User ID: {}", dto.getUserId());
 
+                Users user = usersRepository.findById(dto.getUserId())
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+                profile = new JobSeekerProfile();
+                profile.setUserId(user);
+                message = "Profile created successfully";
+            }
+
+            // Update or set common fields
             List<Skill> skills = skillRepository.findAllById(dto.getSkillIds());
             if (skills.isEmpty()) {
                 throw new ValidationException("At least one valid skill is required");
             }
 
-            JobSeekerProfile profile = JobSeekerProfile.builder()
-                    .userId(user)
-                    .firstName(dto.getFirstName())
-                    .firstName(dto.getLastName())
-                    .headline(dto.getHeadline())
-                    .currentPosition(dto.getCurrentPosition())
-                    .education(dto.getEducation())
-                    .location(dto.getLocation())
-                    .industry(dto.getIndustry())
-                    .aboutMe(dto.getAboutMe())
-                    .openToWork(dto.isOpenToWork())
-                    .skills(skills)
-                    .build();
+            profile.setFirstName(dto.getFirstName());
+            profile.setLastName(dto.getLastName());
+            profile.setHeadline(dto.getHeadline());
+            profile.setCurrentPosition(dto.getCurrentPosition());
+            profile.setEducation(dto.getEducation());
+            profile.setLocation(dto.getLocation());
+            profile.setIndustry(dto.getIndustry());
+            profile.setAboutMe(dto.getAboutMe());
+            profile.setOpenToWork(dto.isOpenToWork());
+            profile.setSkills(skills);
 
-            return jobSeekerProfileRepository.save(profile);
+            JobSeekerProfile savedProfile = jobSeekerProfileRepository.save(profile);
+
+            // Return success response with message
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("profile", savedProfile);
+            response.put("message", message);
+            return ResponseEntity.ok(response);
+
         } catch (Exception e) {
-            log.error("Error creating student profile: {}", e.getMessage());
-            throw new ValidationException("Failed to create profile: " + e.getMessage());
+            log.error("Error processing student profile: {}", e.getMessage());
+            throw new ValidationException("Failed to process profile: " + e.getMessage());
         }
     }
+
 
     public JobSeekerProfile getStudentProfile(Long userId) {
         log.info("Fetching student profile for User ID: {}", userId);

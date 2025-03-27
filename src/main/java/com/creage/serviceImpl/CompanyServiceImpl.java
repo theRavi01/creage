@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.creage.dto.CompanyDTO;
 import com.creage.exception.JobLimitExceededException;
 import com.creage.exception.ResourceNotFoundException;
 import com.creage.model.Company;
+import com.creage.model.CompanyVerification;
 import com.creage.model.JobVacancy;
 import com.creage.model.Subscription;
 import com.creage.model.Users;
@@ -31,36 +33,43 @@ public class CompanyServiceImpl {
     private final JobVacancyRepository jobVacancyRepository;
 
 
-    /**
-     * Registers a company and assigns a free subscription with 3 job postings.
-     */
     @Transactional
-    public Company registerCompany(Company company) {
+    public Company registerCompany(CompanyDTO dto) {
         try {
+            Company company;
+
+            if (dto.getId() != null) {
+                // Update existing company
+                company = companyRepository.findById(dto.getId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+            } else {
+                // Create new company
+                company = new Company();
+                company.setIsVerified(CompanyVerification.UNVERIFIED);
+            }
+
             // Validate user existence
-            Users user = usersRepository.findById(company.getUser().getId())
+            Users user = usersRepository.findById(dto.getUserId())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-            // Assign user to the company
+            // Set company details from DTO
             company.setUser(user);
+            company.setName(dto.getName());
+            company.setDescription(dto.getDescription());
+            company.setIndustry(dto.getIndustry());
+            company.setLocation(dto.getLocation());
+            company.setWebsite(dto.getWebsite());
+            company.setContactEmail(dto.getContactEmail());
+            company.setContactPhone(dto.getContactPhone());
+            company.setLinkedIn(dto.getLinkedIn());
+            company.setTwitter(dto.getTwitter());
 
             // Save company details
             Company savedCompany = companyRepository.save(company);
-
-            // Create a free subscription valid for 30 days
-            Subscription freeSubscription = new Subscription();
-            freeSubscription.setSubscriptionStartDate(LocalDate.now());
-            freeSubscription.setSubscriptionEndDate(LocalDate.now().plusDays(30));
-            freeSubscription.setPlanType("FREE");
-            freeSubscription.setValid(true);
-            freeSubscription.setUser(user);
-
-            // Save subscription
-            subscriptionRepository.save(freeSubscription);
-
             return savedCompany;
+
         } catch (Exception e) {
-            throw new RuntimeException("Error registering company: " + e.getMessage());
+            throw new RuntimeException("Error registering/updating company: " + e.getMessage());
         }
     }
 

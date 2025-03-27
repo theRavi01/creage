@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.creage.dto.CompanyDTO;
 import com.creage.model.Company;
 import com.creage.model.JobApplication;
 import com.creage.model.JobVacancy;
@@ -33,7 +34,7 @@ public class CompanyController {
      * Registers a new company.
      */
     @PostMapping("/register")
-    public ResponseEntity<?> registerCompany(@Valid @RequestBody Company company) {
+    public ResponseEntity<?> registerCompany(@Valid @RequestBody CompanyDTO company) {
         try {
             Company registeredCompany = companyService.registerCompany(company);
             return ResponseEntity.status(HttpStatus.CREATED).body(registeredCompany);

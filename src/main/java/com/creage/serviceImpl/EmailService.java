@@ -38,7 +38,7 @@ public class EmailService {
                     "</body>" +
                     "</html>";
 
-            helper.setFrom(from, "Creage");
+            helper.setFrom(from, "Team Creage");
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(content, true); // Enable HTML content
