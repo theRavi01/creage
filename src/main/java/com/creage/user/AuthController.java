@@ -79,7 +79,6 @@ public class AuthController {
 
 
 	        UIResponse uiResponse = new UIResponse();
-	        String randomPassword = null;
 
 	        if (dto.getEmail() == null || dto.getEmail().isEmpty()) {
 	            return ResponseEntity.badRequest().body("Email is required");
@@ -98,9 +97,8 @@ public class AuthController {
 	        if (isNewUser) {
 	            userToSave.setEmail(dto.getEmail());
 	            userToSave.setCreateddate(LocalDateTime.now());
-	            randomPassword = String.format("%08d", new Random().nextInt(100_000_000));
 	            userToSave.setUsername(dto.getUserName());
-	            userToSave.setPassword(passwordEncoder.encode(randomPassword));
+	            userToSave.setPassword(passwordEncoder.encode(dto.getPassword()));
 	        } else {
 	            if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
 	                userToSave.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -126,7 +124,7 @@ public class AuthController {
 	        String roleName = Role.getRoleById(saved.getRole());
 
 	        if (isNewUser) {
-	            emailService.sendWelcomeEmail(saved.getEmail(), saved.getUsername(), randomPassword);
+	            emailService.sendWelcomeEmail(saved.getEmail(), saved.getUsername(), dto.getPassword());
 	        }
 
 	        Authentication authentication = new UsernamePasswordAuthenticationToken(
