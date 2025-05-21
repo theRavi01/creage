@@ -1,16 +1,14 @@
-package com.creage.model;
+package com.creage.SecurityConfig;
 
-
-public enum Role {
-
-	STUDENT(1),
+public enum RoleType {
+    STUDENT(1),
     COMPANY(2),
     EDUSITE(0),
     ADMIN(3);
 
     private final int id;
 
-    Role(int id) {
+    RoleType(int id) {
         this.id = id;
     }
 
@@ -19,7 +17,7 @@ public enum Role {
     }
 
     public static String getRoleById(int id) {
-        for (Role role : Role.values()) {
+        for (RoleType role : RoleType.values()) {
             if (role.getId() == id) {
                 return role.name();
             }

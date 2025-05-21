@@ -1,5 +1,7 @@
 package com.creage.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,8 +36,8 @@ public @Data class Experience {
     String company;
     private String role;
     private String location;
-    private int startYear;
-    private int endYear;
-    private boolean currentlyWorking;
+    private LocalDate startYear;
+    private LocalDate endYear;
+    private int currentlyWorking;
     private String description;
 }

@@ -43,7 +43,7 @@ public class JobVacancy {
     private String employmentType; // e.g., Full-Time, Part-Time
     private LocalDateTime postedAt = LocalDateTime.now();
     private LocalDateTime applicationDeadline;
-    private boolean isActive; // Indicates if the job is currently accepting applications
+    private int isActive; // Indicates if the job is currently accepting applications
 
     @OneToMany(mappedBy = "jobVacancy")
     private List<JobApplication> applications;  // ✅ Updated reference

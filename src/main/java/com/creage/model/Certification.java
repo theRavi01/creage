@@ -1,5 +1,7 @@
 package com.creage.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,6 +34,6 @@ public class Certification {
 
     private String name;
     private String issuingOrganization;
-    private int year;
+    private LocalDate year;
     private String certificateUrl;
 }

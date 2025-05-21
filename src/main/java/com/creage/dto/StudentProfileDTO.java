@@ -35,7 +35,7 @@ public class StudentProfileDTO {
 
     private String aboutMe;
 
-    private boolean openToWork;
+    private int openToWork;
 
     private List<Long> skillIds; // List of Skill IDs
 }

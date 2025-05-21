@@ -1,5 +1,7 @@
 package com.creage.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,7 +36,7 @@ public class Education {
     private String institution;
     private String degree;
     private String fieldOfStudy;
-    private int startYear;
-    private int endYear;
-    private boolean currentlyStudying;
+    private LocalDate startYear;
+    private LocalDate endYear;
+    private int currentlyStudying;
 }

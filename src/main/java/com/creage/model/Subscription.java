@@ -29,7 +29,7 @@ public class Subscription {
 	
 	private String planType;
 	
-	private boolean isValid;
+	private int isValid;
 	
 	@OneToOne
 	@JsonIgnore  

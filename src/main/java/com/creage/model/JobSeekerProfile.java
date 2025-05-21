@@ -43,7 +43,7 @@ public class JobSeekerProfile {
     private String location;
     private String industry;
     private String aboutMe;
-    private boolean openToWork; 
+    private int openToWork; 
 
     @ManyToMany
     @JoinTable(

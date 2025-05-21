@@ -1,5 +1,7 @@
 package com.creage.model;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -25,11 +27,17 @@ public class Users {
 	
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
-	private Role role;
+	private int role;
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Subscription subscription;
 
+	private LocalDateTime createddate;
 
+	private String username;
+	
+	private Integer writeaccess;
+	
+	
 }

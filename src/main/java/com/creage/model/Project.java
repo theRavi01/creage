@@ -36,6 +36,7 @@ public class Project {
     private String title;
     private String description;
     private String githubLink;
+    private String role;
     private LocalDateTime createdAt = LocalDateTime.now();
 }
 
